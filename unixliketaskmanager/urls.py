@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework import routers
 from django.urls import include
-
+from unixliketaskmanager.sample_entry_page import index
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('task.urls')),
+    path('taskapi/', include('task.urls')),
+    path('userapi/', include('user.urls')),
+    path('', index),
 ]

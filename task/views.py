@@ -1,10 +1,14 @@
 from rest_framework import viewsets
 from task.models import Task
 from task.serializers import TaskSerializer,TaskSerializerList
-
+from rest_framework import permissions
+from task.task import run_task
+import asyncio
+import threading
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes= [permissions.IsAuthenticated,]
     
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -26,3 +30,9 @@ class TaskViewSet(viewsets.ModelViewSet):
         if obj.user != self.request.user:
             raise Http404("Task not found")
         return obj
+    
+    def create(self, request, *args, **kwargs):
+        response=super().create(request, *args, **kwargs)
+        task_id = response.data['id']
+        threading.Thread(target=lambda: asyncio.run(run_task(task_id))).start()
+        return response

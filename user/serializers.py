@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from user.models import User
 import re
+import logging
+logger = logging.getLogger(__name__)
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -19,6 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
         
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
+        logger.info(f"User {user.username} created successfully.")
         return user
     
     def update(self, instance, validated_data):
@@ -27,5 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         if password:
             instance.set_password(password)
+
         instance.save()
+        logger.info(f"User {instance.username} updated successfully.")
         return instance

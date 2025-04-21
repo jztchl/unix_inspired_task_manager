@@ -5,6 +5,8 @@ from rest_framework import permissions
 from task.task import run_task
 import asyncio
 import threading
+import logging
+logger = logging.getLogger(__name__)
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -35,4 +37,5 @@ class TaskViewSet(viewsets.ModelViewSet):
         response=super().create(request, *args, **kwargs)
         task_id = response.data['id']
         threading.Thread(target=lambda: asyncio.run(run_task(task_id))).start()
+        logger.info(f"Task {task_id} created and added to the queue.")
         return response

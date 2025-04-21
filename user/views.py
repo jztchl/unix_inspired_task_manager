@@ -4,7 +4,7 @@ from user.serializers import UserSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-
+from django.http import Http404
 class UserCreateAPIView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -15,9 +15,7 @@ class UserManageAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self,obj):
-        if obj!=self.request.user:
-            raise Http404("You are not allowed to access this user.")
+    def get_object(self): 
         return self.request.user
 
 class CustomObtainAuthToken(ObtainAuthToken):

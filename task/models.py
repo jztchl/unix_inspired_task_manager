@@ -7,6 +7,7 @@ class StatusChoices(Enum):
     RUNNING = "running"
     COMPLETED = "completed"
     FAILED = "failed"
+    KILLED = "killed"
 
 class Task(models.Model):
     name = models.CharField(max_length=255)

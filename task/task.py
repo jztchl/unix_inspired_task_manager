@@ -23,6 +23,7 @@ async def run_task(task_id):
         loop_task = asyncio.create_task(execute_task(task))
         running_tasks[task_id] = loop_task
         await loop_task
+        await sync_to_async(task.refresh_from_db)()
         if task.status!= StatusChoices.KILLED.value:
             task.status = StatusChoices.COMPLETED.value
             task.completed_at = timezone.now()

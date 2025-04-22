@@ -1,6 +1,3 @@
-Yo, I see you're adding the logic to handle task creation and management. Let's update the README and task flow accordingly. Here's your updated **README.md** with the new logic, and I'll include the current `TaskViewSet` and `run_task` structure for clarity:
-
----
 
 # UNIX Task Manager
 

@@ -93,7 +93,10 @@
           body: JSON.stringify({ username,email, password }),
         });
 
-        if (!res.ok) throw new Error("Registration failed");
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(JSON.stringify(errorData) || "Registration failed");
+        }
 
         alert("Registered successfully! Please login.");
         toggleLogin(true);
@@ -120,7 +123,7 @@
         localStorage.setItem("token", token);
         showMain();
       } catch (err) {
-        alert(err.message || "Login failed!");
+        alert("Login failed! Invalid credentials.");
       }
     }
 

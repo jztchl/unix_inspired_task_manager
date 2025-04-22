@@ -187,14 +187,10 @@ Tasks can be created and processed asynchronously. Here's how the process works:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License
 
 ---
 
 ## Credits
 
 Created with ❤️ by [jztchl](https://github.com/jztchl)
-
----
-
-Now you have the README reflecting your updated task flow with the background processing of tasks. Each part of the code ties into the task handling process, so any task, for now, can be added for asynchronous execution like a simple `sleep`.

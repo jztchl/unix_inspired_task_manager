@@ -43,7 +43,7 @@ async def run_task(task_id):
 
 async def execute_task(task):
     try:
-        await asyncio.sleep(40)
+        await asyncio.sleep(60)
     except asyncio.CancelledError:
         task.status = StatusChoices.KILLED.value
         await sync_to_async(task.save)()

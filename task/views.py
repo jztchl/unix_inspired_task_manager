@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets,response
 from task.models import Task
 from task.serializers import TaskSerializer,TaskSerializerList
 from rest_framework import permissions
@@ -6,6 +6,9 @@ from task.task import run_task
 import asyncio
 import threading
 import logging
+from task.models import StatusChoices
+from task.task import running_tasks
+
 logger = logging.getLogger(__name__)
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
@@ -39,3 +42,15 @@ class TaskViewSet(viewsets.ModelViewSet):
         threading.Thread(target=lambda: asyncio.run(run_task(task_id))).start()
         logger.info(f"Task {task_id} created and added to the queue.")
         return response
+    
+    def destroy(self, request, *args, **kwargs):
+        task= self.get_object()
+        this_task = running_tasks.get(task.id)
+        if this_task:
+            this_task.cancel()
+            logger.info(f"Task {task.id} killed.")
+            message = f"Task {task.id} killed."
+        else:
+            logger.info(f"Task {task.id} already completed or killed.")
+            message = f"Task {task.id} already completed or killed."
+        return response.Response({"detail":message}, status=204)

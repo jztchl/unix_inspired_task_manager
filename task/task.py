@@ -23,10 +23,11 @@ async def run_task(task_id):
         loop_task = asyncio.create_task(execute_task(task))
         running_tasks[task_id] = loop_task
         await loop_task
-        task.status = StatusChoices.COMPLETED.value
-        task.completed_at = timezone.now()
-        await sync_to_async(task.save)()
-        logger.info(f"Task {task_id} status changed to completed.")
+        if task.status!= StatusChoices.KILLED.value:
+            task.status = StatusChoices.COMPLETED.value
+            task.completed_at = timezone.now()
+            await sync_to_async(task.save)()
+            logger.info(f"Task {task_id} status changed to completed.")
 
     except Exception as e:
         task.status = StatusChoices.FAILED.value
@@ -44,6 +45,7 @@ async def execute_task(task):
     try:
         await asyncio.sleep(40)
     except asyncio.CancelledError:
-        logger.info(f"Task {task.id} was killed.")
         task.status = StatusChoices.KILLED.value
         await sync_to_async(task.save)()
+        logger.info(f"Task {task.id} was killed.")
+        return

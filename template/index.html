@@ -196,6 +196,19 @@
       await loadTasks();
     }
 
+    async function killTask(taskid) {
+      const res = await fetch(`/taskapi/tasks/${taskid}/`, {
+        method: "DELETE",
+        headers: { Authorization: `Token ${token}` },
+      });
+      const data = await res.json();
+      console.log(data);
+      alert(data.detail)
+      
+      await loadTasks();
+      
+    }
+
     async function showTaskDetail(taskid) {
       const res = await fetch(`/taskapi/tasks/${taskid}`, {
         headers: { Authorization: `Token ${token}` },
@@ -219,6 +232,7 @@
         <p><strong>Created:</strong> ${task.created_at}</p>
         <p><strong>Updated:</strong> ${task.updated_at}</p>
         ${task.completed_at ? `<p><strong>Completed:</strong> ${task.completed_at}</p>` : ""}
+        <button onclick=killTask(${task.id})>Kill Task</button>
       `;
     }
 

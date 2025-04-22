@@ -48,9 +48,9 @@ class TaskViewSet(viewsets.ModelViewSet):
         this_task = running_tasks.get(task.id)
         if this_task:
             this_task.cancel()
-            logger.info(f"Task {task.id} killed.")
-            message = f"Task {task.id} killed."
+            logger.info(f"Task {task.id} kill triggered.")
+            message = f"Task {task.id} kill triggered."
         else:
             logger.info(f"Task {task.id} already completed or killed.")
             message = f"Task {task.id} already completed or killed."
-        return response.Response({"detail":message}, status=204)
+        return response.Response({"detail":message}, status=200)

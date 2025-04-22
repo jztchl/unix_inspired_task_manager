@@ -86,7 +86,7 @@ The frontend will automatically interact with the backend running at `http://loc
     }
     ```
 
-### **Get Tasks**
+### **Get Tasks,ls**
 
 - **GET** `/taskapi/tasks/`
   - Headers: `Authorization: Token your_token_here`
@@ -111,7 +111,7 @@ The frontend will automatically interact with the backend running at `http://loc
     ]
     ```
 
-### **Create Task**
+### **Create Task,fork**
 
 - **POST** `/taskapi/tasks/`
   - Request body:
@@ -138,6 +138,16 @@ The frontend will automatically interact with the backend running at `http://loc
     }
     ```
 
+### **Kill Task**
+
+- **DELETE** `/taskapi/tasks/{task_id}/`
+  - Response:
+    ```json
+    {
+      "detail":"Task 7 killed"
+    }
+    ```
+
 ---
 
 ## Task Flow
@@ -153,8 +163,11 @@ Tasks can be created and processed asynchronously. Here's how the process works:
 3. **Task Update**:
    - During execution, the task status is updated to `RUNNING`.
    - After completion, the status is set to `COMPLETED`, and the completion timestamp is added.
+     
+4. **Kill Task**:
+   kill pending or running task, the task's status will be set to `KILLED`.
 
-4. **Failure Handling**:
+5. **Failure Handling**:
    If any errors occur during task execution, the task's status will be set to `FAILED`.
 
 
